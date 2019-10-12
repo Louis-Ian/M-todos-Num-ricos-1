@@ -18,10 +18,21 @@ def functionD(x, a1, a2):
 
 #Função para calcular a derivada de qualquer função a partir da definição de derivada:f'(x)==f(x+h)-f(x)/h', onde h é um valor proximo de zero
 
-def derivative(f, x1, a1, a2):
-	h=0.1e-10
+def derivate(f, h, x1, a1, a2):
 	top=f(x1+h, a1, a2)-f(x1, a1, a2)
 	bottom=h
+	return top/bottom
+
+def centralderivate(f, h, x1, a1, a2):
+	top=f(x1+h, a1, a2)-f(x1-h, a1, a2)
+	bottom=2*h
+	return top/bottom
+
+#Função melhorada para calcular a derivada usando a extrapolação de Richardson
+
+def richardsonExtrapolation(f, h, x1, a1, a2):
+	top=4*centralderivate(f, 2*h, x1, a1, a2)-centralderivate(f, h, x1, a1, a2)
+	bottom=3
 	return top/bottom
 
 #Funções que usam a função derivada pré-determinada functionD
@@ -56,25 +67,25 @@ def newtonFL(x1, a1, a2, e1, e2, l):
 
 #Funções que usam a função generica derivate para calcular a derivada
 
-def newton2(x1, a1, a2, e1, e2):
+def newton2(x1, a1, a2, e1, e2, h):
 	if abs(function(x1, a1, a2))<e1:
 		return x
 	while True:
 		f1=function(x1, a1, a2)
-		f2=derivative(function, x1, a1, a2)
+		f2=richardsonExtrapolation(function, h, x1, a1, a2)
 		x2=x1-(f1/f2)
 		if abs(function(x2, a1, a2))<e1 or abs(x2-x1)<e2:
 			return x2
 		else:
 			x1=x2
 
-def newtonFL2(x1, a1, a2, e1, e2, l):
+def newtonFL2(x1, a1, a2, e1, e2, l, h):
 	if abs(function(x1, a1, a2))<e1:
 		return x
 	while True:
 		f1=function(x1, a1, a2)
-		f2=derivative(function, x1, a1, a2)
-		if abs(f2)>l:
+		f2=richardsonExtrapolation(function, h, x1, a1, a2)
+		if abs(f2)>=l:
 			fw=f2
 		else:
 			f2=fw
@@ -86,6 +97,7 @@ def newtonFL2(x1, a1, a2, e1, e2, l):
 
 #Dados usado para calibrar o sistema, de acordo com o item d do trabalho
 
+h=0.1e-5
 d0=-1.275
 l=0.05
 e1=0.05
@@ -93,7 +105,8 @@ e2=e1
 a1=1
 a2=1
 
-#print(newton(d0, a1, a2, e1, e2))
-print(newton2(d0, a1, a2, e1, e2))
-#print(newtonFL(d0, a1, a2, e1, e2, l))
-print(newtonFL2(d0, a1, a2, e1, e2, l))
+
+print(newton(d0, a1, a2, e1, e2))
+print(newton2(d0, a1, a2, e1, e2, h))
+print(newtonFL(d0, a1, a2, e1, e2, l))
+print(newtonFL2(d0, a1, a2, e1, e2, l, h))
