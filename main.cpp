@@ -3,31 +3,75 @@
 
 using namespace std;
 
-// Variáveis da função dada
-double a1 = 1.0;
-double a2 = 1.0;
-double h = 0.1e-5;
-double d0 = -1.275;
-double l = 0.05;
-double e1 = 0.05;
-double e2 = 0.05;
-double x;
+// Variáveis globais
+// f(X) = A3*X^3 – 9*A2*X + 3
+u_int k = 1;
+float a3 = 1.0;
+float a2 = 1.0;
+float h = 0.1e-5;
+float d0 = -1.275;
+float l = 0.05;     // lambda λ
+float e1 = 0.05;
+float e2 = 0.05;
+float x;
 
-// 
-double pendulo (double xAtt, double a1Att, double a2Att) {
-    x = xAtt;       // X atributo da função
-    a1 = a1Att;     // A1 atributo da função
-    a2 = a2Att;     // A2 atributo da função
+// Função do pêndulo, dada pelo trabalho
+// f(X) = A3*X^3 – 9*A2*X + 3
+float pendulo (float xAtt, float a3Att, float a2Att) {
+    x = xAtt;       // Parâmetro X da função
+    a3 = a3Att;     // Parâmetro A3 da função
+    a2 = a2Att;     // Parâmetro A2 da função
 
-    return ((3.0 * a1 * x * x) - (9 * a2));
+    return (a3 * pow(x, 3) - 9 * a2 * x + 3);
 };
+
+// Derivada da função do pêndulo
+// f'(X) = A3*3*X^2 - 9*A2
+float derivadaPendulo (float xAtt, float a3Att, float a2Att) {
+    x = xAtt;       // Parâmetro X da função
+    a3 = a3Att;     // Parâmetro A3 da função
+    a2 = a2Att;     // Parâmetro A2 da função
+
+    return ((3.0 * a3 * x * x) - (9 * a2));
+}
+
+// Método de Newton-Raphson original
+float newton_raphson (float x1Att, float a3Att, float a2Att, float e1Att, float e2Att){
+    e1 = e1Att;
+    e2 = e2Att;
+
+    float f1 = pendulo(x1Att, a3Att, a2Att);           // Função f(x)
+
+    if (abs(f1) < e1){   // Primeira checagem de parada
+        return x;
+    }
+
+    float f2 = derivadaPendulo(x1Att, a3Att, a2Att);   // Função f'(x)
+    float x2 = x - (f1 / f2);
+    while(true){
+        f1 = pendulo(x1Att, a3Att, a2Att);
+        f2 = derivadaPendulo(x1Att, a3Att, a2Att);
+        x2 = x - (f1 / f2);
+
+        if (abs(f1) < e1 or abs(x2-x1Att) < e2) {
+            return x2;
+        } else {
+            x1Att = x2;
+        }
+    }
+}
 
 
 int main () {
 
-    double teste = pendulo(1.0, a1, a2);    // deve dar -6
+    float testePendulo = pendulo(1.0 , 1.0, 1.0);    // deve dar -5
+    cout << "\nValor do teste de f(x): " << testePendulo << endl;
 
-    cout << "\nValor do teste: " << teste << endl;
+    float testeDerivadaPendulo = derivadaPendulo(1.0, 1.0, 1.0);  // deve dar -6
+    cout << "\nValor do teste de f'(x): " << testeDerivadaPendulo << endl;
+
+    float testeNewtonRaphson = newton_raphson(d0, a3, a3, e1, e2);  // deve dar ~2.816978
+    cout << "\nValor do teste de Newton-Raphson: " << testeNewtonRaphson << endl;
 
     return 0;
 }
