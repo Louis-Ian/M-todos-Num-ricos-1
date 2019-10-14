@@ -35,28 +35,6 @@ float derivadaPendulo (float xAtt, float a3Att, float a2Att) {
     return ((3.0 * a3 * x * x) - (9 * a2));
 }
 
-// Função para calcular a derivada de qualquer função a partir da definição de derivada:f'(x)==f(x+h)-f(x)/h', onde h é um valor proximo de zero
-
-float derivada(float f, float h, float x1, float a1, float a2){
-	float enumerador = f*(x1+h, a1, a2)-f*(x1, a1, a2);
-	float denominador = h;
-	return enumerador / denominador;
-}
-
-float derivadaCentral(float f, float h, float x1, float a1, float a2){
-	float enumerador = f*(x1+h, a1, a2)-f*(x1-h, a1, a2);
-	float denominador = 2*h;
-	return enumerador / denominador;
-}
-
-// Função melhorada para calcular a derivada usando a extrapolação de Richardson
-
-float richardsonExtrapolation(float f, float h, float x1, float a1, float a2){
-	float enumerador = 4*derivadaCentral(f, 2*h, x1, a1, a2)-derivadaCentral(f, h, x1, a1, a2);
-	float denominador = 3;
-	return enumerador / denominador;
-}
-
 // Método de Newton-Raphson original
 float newton_raphson (float x1Att, float a3Att, float a2Att, float e1Att, float e2Att){
     e1 = e1Att;
@@ -118,6 +96,53 @@ float newton_raphson_fl (float x1Att, float a3Att, float a2Att, float e1Att, flo
     }
 }
 
+// Função para calcular a derivada de qualquer função a partir da definição de derivada:f'(x)==f(x+h)-f(x)/h', onde h é um valor proximo de zero
+float derivada_numerica(float f(float, float, float), float h, float x1, float a1, float a2){
+	float numerador = f(x1+h, a1, a2) - f(x1, a1, a2);
+	float denominador = h;
+	return numerador / denominador;
+}
+
+float derivadaCentral(float f(float, float, float), float h, float x1, float a1, float a2){
+	float numerador = f(x1+h, a1, a2) -f(x1-h, a1, a2);
+	float denominador = 2*h;
+	return numerador / denominador;
+}
+
+// Função melhorada para calcular a derivada usando a extrapolação de Richardson
+float richardsonExtrapolation(float (*f)(float, float, float), float h, float x1, float a1, float a2){
+	float numerador = 4*derivadaCentral(f, 2*h, x1, a1, a2)-derivadaCentral(f, h, x1, a1, a2);
+	float denominador = 3;
+	return numerador / denominador;
+}
+
+// Método de Newton-Raphson utilizando derivada calculada numericamente
+float newton_raphson_derivada_numerica (float x1Att, float a3Att, float a2Att, float e1Att, float e2Att, float hAtt){
+    e1 = e1Att;
+    e2 = e2Att;
+    h = hAtt;
+
+    float f1 = pendulo(x1Att, a3Att, a2Att);           // Função f(x)
+
+    if (abs(f1) < e1){   // Primeira checagem de parada
+        return x;
+    }
+
+    float f2 = derivada_numerica(pendulo, h, x1Att, a3Att, a2Att );   // Função f'(x)
+    float x2 = x - (f1 / f2);
+    while(true){
+        f1 = pendulo(x1Att, a3Att, a2Att);
+        f2 = derivada_numerica(pendulo, h, x1Att, a3Att, a2Att);
+        x2 = x - (f1 / f2); // x' = x - f(x)/f'(x)
+
+        if (abs(f1) < e1 or abs(x2-x1Att) < e2) {   // Segunda checagem de parada
+            return x2;
+        } else {
+            x1Att = x2;
+        }
+    }
+}
+
 
 int main () {
 
@@ -132,6 +157,9 @@ int main () {
 
     float testeNewtonRaphsonFL = newton_raphson_fl(d0, a3, a2, e1, e2, l);  // deve dar aproximadamente 0.333780224702
     cout << "\nValor do teste de Newton-Raphson-lâmbda: " << testeNewtonRaphsonFL << endl;
+
+    float testeNewtonRaphsonDerivadaNumerica = newton_raphson_derivada_numerica(d0, a3, a2, e1, e2, h);  // deve dar aproximadamente 2.81697875231
+    cout << "\nValor do teste de Newton-Raphson-lâmbda: " << testeNewtonRaphsonDerivadaNumerica << endl;
 
     return 0;
 }
