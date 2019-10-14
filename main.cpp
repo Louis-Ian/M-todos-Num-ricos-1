@@ -105,10 +105,10 @@ int main () {
     float testeDerivadaPendulo = derivadaPendulo(1.0, 1.0, 1.0);  // deve dar -6
     cout << "\nValor do teste de f'(x): " << testeDerivadaPendulo << endl;
 
-    float testeNewtonRaphson = newton_raphson(d0, a3, a3, e1, e2);  // deve dar aproximadamente 2.81697875211
+    float testeNewtonRaphson = newton_raphson(d0, a3, a2, e1, e2);  // deve dar aproximadamente 2.81697875211
     cout << "\nValor do teste de Newton-Raphson: " << testeNewtonRaphson << endl;
 
-    float testeNewtonRaphsonFL = newton_raphson_fl(d0, a3, a3, e1, e2, l);  // deve dar aproximadamente 0.333780224702
+    float testeNewtonRaphsonFL = newton_raphson_fl(d0, a3, a2, e1, e2, l);  // deve dar aproximadamente 0.333780224702
     cout << "\nValor do teste de Newton-Raphson-lâmbda: " << testeNewtonRaphsonFL << endl;
 
     return 0;
