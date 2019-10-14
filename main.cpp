@@ -51,9 +51,44 @@ float newton_raphson (float x1Att, float a3Att, float a2Att, float e1Att, float 
     while(true){
         f1 = pendulo(x1Att, a3Att, a2Att);
         f2 = derivadaPendulo(x1Att, a3Att, a2Att);
-        x2 = x - (f1 / f2);
+        x2 = x - (f1 / f2); // x' = x - f(x)/f'(x)
 
-        if (abs(f1) < e1 or abs(x2-x1Att) < e2) {
+        if (abs(f1) < e1 or abs(x2-x1Att) < e2) {   // Segunda checagem de parada
+            return x2;
+        } else {
+            x1Att = x2;
+        }
+    }
+}
+
+// Método de Newton-Raphson utilizando lâmbda
+float newton_raphson_fl (float x1Att, float a3Att, float a2Att, float e1Att, float e2Att, float lAtt){
+    e1 = e1Att;
+    e2 = e2Att;
+    l = lAtt;
+
+    float f1 = pendulo(x1Att, a3Att, a2Att);           // Função f(x)
+
+    if (abs(f1) < e1){   // Primeira checagem de parada
+        return x;
+    }
+
+    float f2 = derivadaPendulo(x1Att, a3Att, a2Att);   // Função f'(x)
+    float fl = f2;  // 
+    float x2 = x - (f1 / f2);
+    while(true){
+        f1 = pendulo(x1Att, a3Att, a2Att);
+        f2 = derivadaPendulo(x1Att, a3Att, a2Att);
+
+        if (abs(f2) > l){
+            fl = f2;
+        } else{
+            f2 = fl;
+        }
+
+        x2 = x - (f1 / f2); // x' = x - f(x)/f'(x)
+
+        if (abs(f1) < e1 or abs(x2-x1Att) < e2) {   // Segunda checagem de parada
             return x2;
         } else {
             x1Att = x2;
@@ -70,8 +105,11 @@ int main () {
     float testeDerivadaPendulo = derivadaPendulo(1.0, 1.0, 1.0);  // deve dar -6
     cout << "\nValor do teste de f'(x): " << testeDerivadaPendulo << endl;
 
-    float testeNewtonRaphson = newton_raphson(d0, a3, a3, e1, e2);  // deve dar ~2.816978
+    float testeNewtonRaphson = newton_raphson(d0, a3, a3, e1, e2);  // deve dar aproximadamente 2.81697875211
     cout << "\nValor do teste de Newton-Raphson: " << testeNewtonRaphson << endl;
+
+    float testeNewtonRaphsonFL = newton_raphson_fl(d0, a3, a3, e1, e2, l);  // deve dar aproximadamente 0.333780224702
+    cout << "\nValor do teste de Newton-Raphson-lâmbda: " << testeNewtonRaphsonFL << endl;
 
     return 0;
 }
