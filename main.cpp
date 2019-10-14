@@ -74,7 +74,7 @@ float newton_raphson_fl (float x1Att, float a3Att, float a2Att, float e1Att, flo
     }
 
     float f2 = derivadaPendulo(x1Att, a3Att, a2Att);   // Função f'(x)
-    float fl = f2;  // 
+    float fl = f2;  // ultimo f'(x) que era maior que lâmbda
     float x2 = x - (f1 / f2);
     while(true){
         f1 = pendulo(x1Att, a3Att, a2Att);
