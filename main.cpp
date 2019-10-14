@@ -35,6 +35,28 @@ float derivadaPendulo (float xAtt, float a3Att, float a2Att) {
     return ((3.0 * a3 * x * x) - (9 * a2));
 }
 
+// Função para calcular a derivada de qualquer função a partir da definição de derivada:f'(x)==f(x+h)-f(x)/h', onde h é um valor proximo de zero
+
+float derivada(float f, float h, float x1, float a1, float a2){
+	float enumerador = f*(x1+h, a1, a2)-f*(x1, a1, a2);
+	float denominador = h;
+	return enumerador / denominador;
+}
+
+float derivadaCentral(float f, float h, float x1, float a1, float a2){
+	float enumerador = f*(x1+h, a1, a2)-f*(x1-h, a1, a2);
+	float denominador = 2*h;
+	return enumerador / denominador;
+}
+
+// Função melhorada para calcular a derivada usando a extrapolação de Richardson
+
+float richardsonExtrapolation(float f, float h, float x1, float a1, float a2){
+	float enumerador = 4*derivadaCentral(f, 2*h, x1, a1, a2)-derivadaCentral(f, h, x1, a1, a2);
+	float denominador = 3;
+	return enumerador / denominador;
+}
+
 // Método de Newton-Raphson original
 float newton_raphson (float x1Att, float a3Att, float a2Att, float e1Att, float e2Att){
     e1 = e1Att;
