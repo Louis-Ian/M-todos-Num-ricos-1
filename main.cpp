@@ -300,7 +300,7 @@ void print_tabela(vector<vector<string>> &tabela, string metodo)
 
 void print_resultado(vector<vector<vector<string>>> &tabela, string metodo)
 {
-    for(int i = 0; i < tabela.size(); i++)
+    for (int i = 0; i < tabela.size(); i++)
     {
         cout << "\nDados lambda: " << l[i] << " - A3: " << a3[i] << " - A2: " << a2[i] << endl;
         cout << metodo << "  ";
@@ -329,18 +329,18 @@ void print_resultado(vector<vector<vector<string>>> &tabela, string metodo)
 
 void print_tabela_comparativo(vector<vector<vector<string>>> tabela_newton, vector<vector<vector<string>>> tabela_newton_lambda, vector<vector<vector<string>>> tabela_newton_numerico)
 {
-    
-    for(int i = 0; i < tabela_newton.size(); i++)
+
+    for (int i = 0; i < tabela_newton.size(); i++)
     {
         cout << "\nDados lambda: " << l[i] << " - A3: " << a3[i] << " - A2: " << a2[i] << endl;
         print_tabela(tabela_newton[i], "Método de newton");
     }
-    for(int i = 0; i < tabela_newton.size(); i++)
+    for (int i = 0; i < tabela_newton.size(); i++)
     {
         cout << "\nDados lambda: " << l[i] << " - A3: " << a3[i] << " - A2: " << a2[i] << endl;
         print_tabela(tabela_newton_lambda[i], "Método de newton com uso de lâmbda");
     }
-    for(int i = 0; i < tabela_newton.size(); i++)
+    for (int i = 0; i < tabela_newton.size(); i++)
     {
         cout << "\nDados lambda: " << l[i] << " - A3: " << a3[i] << " - A2: " << a2[i] << endl;
         print_tabela(tabela_newton_numerico[i], "Método de newton com uso de derivada numérica");
