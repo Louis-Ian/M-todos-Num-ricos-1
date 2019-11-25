@@ -17,6 +17,7 @@ public:
     Matriz Gauss();   // Resolver por Gauss
     vector<float> get(int);
     float get(int, int);
+    void print();
 };
 
 Matriz::Matriz()
@@ -61,25 +62,40 @@ Matriz Matriz::Gauss()
     };
 }
 
+void Matriz::print()
+{
+    for(int i = 0; i < this->getTamanho(); i++)
+    {
+        for(int j = 0; j < this->getTamanho(); j++)
+        {
+            cout.width(4);
+            cout << this->matriz[i][j] << " ";
+        }
+        cout << endl;
+    }
+}
+
 // Globais
 int n;   // Número de pêndulos
 float a; // Parâmetro 'a' em 'a*d' da amplitude
 
 int main()
 {
-    vector<vector<float>> dadosTeste1d = {{1, 9, 8}, {7, 6, 5}, {4, 3, 2}};
+    vector<vector<float>> dadosTeste1d = {{10, 1, 1}, {1, 10, 1}, {1, 1, 10}};
     Matriz teste1d(dadosTeste1d);
 
-    cout << "\n(2):\n";
-    vector<float> linha2 = teste1d.get(2);
-    for (int i = 0; i < teste1d.getTamanho(); i++)
-    {
-        cout << linha2[i] << " ";
-    }
-    cout << endl;
+    // cout << "\n(2):\n";
+    // vector<float> linha2 = teste1d.get(2);
+    // for (int i = 0; i < teste1d.getTamanho(); i++)
+    // {
+    //     cout << linha2[i] << " ";
+    // }
+    // cout << endl;
 
-    cout << "\n(1, 1):\n";
-    cout << teste1d.get(1, 1) << endl;
+    // cout << "\n(1, 1):\n";
+    // cout << teste1d.get(1, 1) << endl;
+
+    teste1d.print();
 
     return 0;
 }
