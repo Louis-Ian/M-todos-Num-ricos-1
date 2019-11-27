@@ -6,80 +6,90 @@ using namespace std;
 class Matriz
 {
 private:
-    int n;                        // Linhas e colunas da matriz
-    vector<vector<double>> matriz; // Vector 2D contendo os dados da matriz
+    int linhas, colunas;                         // Linhas e colunas da matriz
+    vector<vector<float>> matriz; // Vector 2D contendo os dados da matriz
 
 public:
     Matriz(); // Inicializador da matriz
-    Matriz(vector<vector<double>>);
+    Matriz(vector<vector<float>>);
     ~Matriz();        // Destrutor da matriz
-    int getTamanho(); // Retorna tamanho n da matriz NxN
-    void gauss();   // Resolver por Gauss
-    vector<double> get(int);
-    double get(int, int);       // Acessa elemento da matriz
-    void set(int, int, double); // Altera elemento da matriz
+    int getLinhas(); // Retorna o numero de linhas da matriz
+    int getColunas();   // Retirna o numero de colunas da matriz
+    void gauss();     // Resolver por Gauss
+    vector<float> get(int);
+    float get(int, int);       // Acessa elemento da matriz
+    void set(int, int, float); // Altera elemento da matriz
     void print();
+    void montarB(vector<float>); // Monta a matriz A com o vetor B
 };
 
 Matriz::Matriz()
 {
-    this->n = 1;
+    this->linhas = 1;
+    this->colunas = 1;
     this->matriz = {{}};
 }
 
-Matriz::Matriz(vector<vector<double>> dados)
+Matriz::Matriz(vector<vector<float>> dados)
 {
-    this->n = dados.size();
+    this->linhas = dados.size();
+    this->colunas = dados[0].size();
     this->matriz = dados;
 }
 
 Matriz::~Matriz()
 {
-    this->n = 0;
+    this->linhas = 0;
+    this->colunas = 0;
     this->matriz.clear();
     this->matriz.shrink_to_fit();
 }
 
-int Matriz::getTamanho()
+int Matriz::getLinhas()
 {
-    return this->n;
+    return this->linhas;
 }
 
-vector<double> Matriz::get(int aLinha)
+int Matriz::getColunas()
+{
+    return this->colunas;
+}
+
+vector<float> Matriz::get(int aLinha)
 {
     return this->matriz[aLinha - 1];
 }
 
-double Matriz::get(int aLinha, int aColuna)
+float Matriz::get(int aLinha, int aColuna)
 {
     return this->matriz[aLinha - 1][aColuna - 1];
 }
 
-void Matriz::set(int aLinha, int aColuna, double valor)
+void Matriz::set(int aLinha, int aColuna, float valor)
 {
     this->matriz[aLinha - 1][aColuna - 1] = valor;
 }
 
 void Matriz::gauss()
 {
-    double novoValor = 0;
-    for (int i = 1; i < this->getTamanho(); i++)
+    float novoValor = 0;
+    for (int i = 1; i < this->getLinhas(); i++)
     {
-        double pivo = this->get(i, i);
-        // vector<double> multiplicador;
+        float pivo = this->get(i, i);
+        // vector<float> multiplicador;
 
-        for (int j = i + 1; j <= this->getTamanho(); j++)
+        for (int j = i + 1; j <= this->getLinhas(); j++)
         {
-            double multiplicador = (this->get(j, i) / pivo);
+            float multiplicador = (this->get(j, i) / pivo);
             // cout << "\nget(j, i): " << this->get(j, i) << endl;
             // cout << "pivo: " << pivo << endl;
             // cout << "m: " << multiplicador << endl;
-            for (int k = i; k <= this->getTamanho(); k++)
+            for (int k = i; k <= this->getColunas(); k++)
             {
-                novoValor = (double(this->get(j, k)) - double(multiplicador * double(this->get(i, k))));
+                novoValor = (float(this->get(j, k)) - float(multiplicador * float(this->get(i, k))));
                 // cout << "(j, k): " << this->get(j, k) << "\n(i, k): " << this->get(i, k) << endl;
                 // cout << "subtraindo: " << float(multiplicador * this->get(i, k)) << endl;
-                // cout << i << ", " << j << ", " << k << ":" << (this->get(j, k) - double(multiplicador * this->get(i, k))) << endl << endl;
+                // cout << i << ", " << j << ", " << k << ":" << (this->get(j, k) - float(multiplicador * this->get(i, k))) << endl << endl;
                 // cout << type_info(this->get(j, k)) << endl;
                 this->set(j, k, novoValor);
             }
@@ -89,31 +99,48 @@ void Matriz::gauss()
 
 void Matriz::print()
 {
-    for (int i = 0; i < this->getTamanho(); i++)
+    for (int i = 0; i < this->getLinhas(); i++)
     {
-        for (int j = 0; j < this->getTamanho(); j++)
+        // cout << "I: " << i << endl;
+        for (int j = 0; j < this->getColunas(); j++)
         {
-            cout.width(8);
+            // cout << "J: " << j << endl;
+            cout.width(12);
             cout << this->get(i + 1, j + 1) << " ";
         }
         cout << endl;
     }
 }
 
+void Matriz::montarB(vector<float> b)
+{
+    if(b.size() == this->linhas)
+    {   
+        this->colunas++;
+        for(int i = 0; i < this->linhas; i++)
+        {
+            this->matriz[i].push_back(b[i]);
+        }
+    } else {
+        cout << "B tem tamanho invalido\n";
+    }
+}
+
 // Globais
-int n;   // Número de pêndulos
-double a; // Parâmetro 'a' em 'a*d' da amplitude
+int n;    // Número de pêndulos
+float a; // Parâmetro 'a' em 'a*d' da amplitude
 
 int main()
 {
-    // vector<vector<double>> dadosTeste1d = {{1, 10, 100}, {10, 1, 100}, {100, 1000, 1}};
-    // vector<vector<double>> dadosTeste1d = {{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}};
-    vector<vector<double>> dadosTeste1d = {{10.0, 1.0, 1.0}, {1.0, 10.0, 1.0}, {1.0, 1.0, 10.0}};
+    vector<vector<float>> dadosTeste1d = {{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}};
+    // vector<vector<float>> dadosTeste1d = {{10.0, 1.0, 1.0}, {1.0, 10.0, 1.0}, {1.0, 1.0, 10.0}};
+    vector<float> testeB = {12.0f, 12.0f, 12.0f};
     Matriz teste1d(dadosTeste1d);
+    teste1d.montarB(testeB);
 
     // cout << "\n(2):\n";
-    // vector<double> linha2 = teste1d.get(2);
-    // for (int i = 0; i < teste1d.getTamanho(); i++)
+    // vector<float> linha2 = teste1d.get(2);
+    // for (int i = 0; i < teste1d.getLinhas(); i++)
     // {
     //     cout << linha2[i] << " ";
     // }
@@ -122,16 +149,10 @@ int main()
     // cout << "\n(1, 1):\n";
     // cout << teste1d.get(1, 1) << endl;
 
-    // teste1d.print();
-
-    // cout << 1.0f - 1.0f/10.0f * 10.0f << endl;
-    
+    teste1d.print();
+    cout << endl;
     teste1d.gauss();
     teste1d.print();
-
-    // vector<vector<double>> testeZero = {{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}};
-    // testeZero[1][1] = 99.0f;
-    // cout << testeZero[1][1] << endl;
 
     return 0;
 }
