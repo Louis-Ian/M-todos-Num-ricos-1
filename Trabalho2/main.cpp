@@ -24,6 +24,7 @@ public:
     float determinante();        // Calcula determinante da matriz
     void gauss();                // Eliminação de Gauss
     void resolveGauss();         // Resolve por Gauss. presume existencia de coluna b de 'Ax=b'
+    void gaussJordan();          // Calcula a matriz por meio do Método de Gauss-Jordan
 };
 
 Matriz::Matriz()
@@ -157,6 +158,29 @@ void Matriz::resolveGauss()
             this->deslocamentos[i] -= this->deslocamentos[j]*this->matriz[i][j];
         }
         this->deslocamentos[i] /= this->matriz[i][i];
+    }
+}
+
+void Matriz::gaussJordan(){
+    float pivo = 0.0f;
+    float novoValor = 0.0f;
+    // Encontra o pivô por linha da matriz.
+    for (int i = 1; i < this->getLinhas(); i++){
+        pivo = this->get(i, i);     // Localiza o elemento aij da matriz, i = j, para ser o pivô.
+        for (int j = 1; j <= this->getColunas(); j++){
+            novoValor = this->get(j, i) / pivo;     // Aqui, cada elemento da linha é dividido pelo pivô, incluindo ele mesmo.
+        }
+        // A partir daqui, os valores das linhas que sobram são calculados: 
+        for (int k = i; k <= this->getLinhas(); k++){
+            if (k != i){
+                float multiplicador = this->get(k, i);  // No Gauss-Jordan, não precisa dividir o aij, i != j, pelo pivô.
+                // Aqui, calculamos os novos aij:
+                for (int l = i; l <= getColunas(); l++){
+                    novoValor = this->get(k, l) - multiplicador * this->get(i, l);
+                    this->set(k, l, novoValor);
+                }
+            }
+        }
     }
 }
 
