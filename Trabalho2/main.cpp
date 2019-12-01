@@ -79,6 +79,7 @@ void Matriz::set(int aLinha, int aColuna, float valor)
 
 void Matriz::print()
 {
+    // Imprime a matriz
     for (int i = 0; i < this->getLinhas(); i++)
     {
         for (int j = 0; j < this->getColunas(); j++)
@@ -89,12 +90,14 @@ void Matriz::print()
         cout << endl;
     }
 
-    for(int i = 0; i < this->deslocamentos.size(); i++)
+    // Imprime os deslocamentos
+    for (int i = 0; i < this->deslocamentos.size(); i++)
     {
         cout.width(12);
         cout << this->deslocamentos[i];
     }
-    cout << endl;
+    cout << endl
+         << endl;
 }
 
 float Matriz::determinante() // TODO finalizar determinante
@@ -145,6 +148,7 @@ void Matriz::gauss()
         }
     };
 }
+
 void Matriz::gauss_jordan()
 {
     float novoValor = 0.0f;
@@ -153,29 +157,31 @@ void Matriz::gauss_jordan()
     for (int i = 1; i <= this->getLinhas(); i++)
     {
         pivo = this->get(i, i);
-        for (int j = 1 ; j <= this->getLinhas(); j++)
+        for (int j = 1; j <= this->getLinhas(); j++)
         {
-            if (j != i){
+            if (j != i)
+            {
                 multiplicador = this->get(j, i) / pivo;
                 for (int k = i; k <= this->getColunas(); k++)
                 {
                     novoValor = this->get(j, k) - multiplicador * this->get(i, k);
                     this->set(j, k, novoValor);
                 }
-            }    
+            }
         }
     };
 }
+
 void Matriz::resolveGauss()
 {
     this->gauss();
     int ultimaColuna = this->colunas - 1;
-    for(int i = this->linhas - 1; i >= 0; i--)
+    for (int i = this->linhas - 1; i >= 0; i--)
     {
         this->deslocamentos[i] = this->matriz[i][ultimaColuna];
-        for(int j = this->linhas - 1; j > i; j--)
+        for (int j = this->linhas - 1; j > i; j--)
         {
-            this->deslocamentos[i] -= this->deslocamentos[j]*this->matriz[i][j];
+            this->deslocamentos[i] -= this->deslocamentos[j] * this->matriz[i][j];
         }
         this->deslocamentos[i] /= this->matriz[i][i];
     }
@@ -184,19 +190,68 @@ void Matriz::resolveGauss()
 // Globais
 int n;   // Número de pêndulos
 float a; // Parâmetro 'a' em 'a*d' da amplitude
+vector<Matriz> matrizes;
+
+void boot()
+{
+    cout.width(6);
+    cout << "\nMENU:\n";
+    cout << "Inserir:\n";
+    cout << "0 para parar o programa.\n";
+    cout << "1 para resolver uma matriz por Gauss.\n";
+    cout << "2 para resolver uma matriz por Gauss-Jordan.\n";
+    cout << "3 para resolver uma matriz por Cramer.\n";
+    cout << "4 para resumir soluções de uma matriz.\n";
+    cout << "9 para calibrar o sistema.\n";
+}
+
+void shutdown()
+{
+    cout << "FIM DO PROGRAMA.";
+}
+
+int inputMenu() // TODO Função que permite input de dados de uma matriz
+{
+    int menu;
+    cin >> menu;
+
+    switch (menu)
+    {
+    case 0:
+        return 1;
+        break;
+    case 1:
+
+        break;
+    default:
+        cout << "Entrada invalida. Tente novamente.\n\n";
+        boot();
+        break;
+    }
+
+    return 0;
+}
 
 Matriz input() // TODO Função que permite input de dados de uma matriz
 {
 }
 
 int main()
-{
+{ /*
+    boot();
+    int fim = 0;
+    do
+    {
+        fim = inputMenu();
+    } while (!fim);
+    shutdown();*/
+    // /* Testes:
     vector<vector<float>> dadosTeste1d = {{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}}; // Matriz C da questão
     // vector<vector<float>> dadosTeste1d = {{10.0, 1.0, 1.0}, {1.0, 10.0, 1.0}, {1.0, 1.0, 10.0}};
     vector<float> testeB = {12.0f, 12.0f, 12.0f}; // Vetor V da questão
     Matriz teste1d(dadosTeste1d);
     teste1d.montarB(testeB);
- 
+
     // cout << "\n(2):\n";
     // vector<float> linha2 = teste1d.get(2);
     // for (int i = 0; i < teste1d.getLinhas(); i++)
