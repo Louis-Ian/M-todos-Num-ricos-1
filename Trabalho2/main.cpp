@@ -23,6 +23,7 @@ public:
     void montarB(vector<float>); // Monta a matriz A com o vetor B
     float determinante();        // Calcula determinante da matriz
     void gauss();                // Eliminação de Gauss
+    void gauss_jordan();         // Eliminação de Gaus-Jordan
     void resolveGauss();         // Resolve por Gauss. presume existencia de coluna b de 'Ax=b'
 };
 
@@ -144,7 +145,27 @@ void Matriz::gauss()
         }
     };
 }
-
+void Matriz:: gauss_jordan()
+{
+    float novoValor = 0.0f;
+    float pivo = 0.0f;
+    float multiplicador = 0.0f;
+    for (int i = 1; i <= this->getLinhas(); i++)
+    {
+        pivo = this->get(i, i);
+        for (int j = 1 ; j <= this->getLinhas(); j++)
+        {
+            if (j != i){
+                multiplicador = this->get(j, i) / pivo;
+                for (int k = i; k <= this->getColunas(); k++)
+                {
+                    novoValor = this->get(j, k) - multiplicador * this->get(i, k);
+                    this->set(j, k, novoValor);
+                }
+            }    
+        }
+    };
+}
 void Matriz::resolveGauss()
 {
     this->gauss();
@@ -175,7 +196,7 @@ int main()
     vector<float> testeB = {12.0f, 12.0f, 12.0f}; // Vetor V da questão
     Matriz teste1d(dadosTeste1d);
     teste1d.montarB(testeB);
-
+ 
     // cout << "\n(2):\n";
     // vector<float> linha2 = teste1d.get(2);
     // for (int i = 0; i < teste1d.getLinhas(); i++)
@@ -189,7 +210,7 @@ int main()
 
     teste1d.print();
     cout << endl;
-    teste1d.gauss();
+    teste1d.gauss_jordan();
     teste1d.print();
     teste1d.resolveGauss();
     teste1d.print();
