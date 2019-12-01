@@ -145,7 +145,7 @@ void Matriz::gauss()
         }
     };
 }
-void Matriz:: gauss_jordan()
+void Matriz::gauss_jordan()
 {
     float novoValor = 0.0f;
     float pivo = 0.0f;
