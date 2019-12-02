@@ -266,12 +266,13 @@ int inputMenu() // TODO Função que permite input de dados de uma matriz
         matriz.print();
         matriz.gauss();
         matriz.resolveGauss();
-        matriz.print();
-        return 1;
-        break;
+        return 99;
     case 2:
-
-        break;
+        matriz = input();
+        matriz.print();
+        matriz.gauss_jordan();
+        matriz.resolveGauss();
+        return 99;
     case 3:
 
         break;
