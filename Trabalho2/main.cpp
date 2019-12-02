@@ -300,6 +300,23 @@ int inputMenu() // TODO Função que permite input de dados de uma matriz
         matriz.resolveGauss();
         return 99;
     case 3:
+        matriz = input();
+        
+        mGauss = matriz;
+        cout << "\nGAUSS:\n";
+        mGauss.gauss();
+        mGauss.resolveGauss();
+        mGauss.print();
+        mGauss.printDeslocamentos();
+        mGauss.printAmplitudes();
+
+        cout << "\nGAUSS-JORDAN:\n";
+        mGaussJordan = matriz;
+        mGaussJordan.gauss_jordan();
+        mGaussJordan.resolveGauss();
+        mGaussJordan.print();
+        mGaussJordan.printDeslocamentos();
+        mGaussJordan.printAmplitudes();
 
         break;
     case 9:
@@ -315,7 +332,6 @@ int inputMenu() // TODO Função que permite input de dados de uma matriz
         mGauss.print();
         mGauss.printDeslocamentos();
         mGauss.printAmplitudes();
-
 
         cout << "\nGAUSS-JORDAN:\n";
         mGaussJordan = matriz;
