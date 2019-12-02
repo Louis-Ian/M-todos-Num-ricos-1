@@ -25,6 +25,8 @@ public:
     void gauss();                // Eliminação de Gauss
     void gauss_jordan();         // Eliminação de Gaus-Jordan
     void resolveGauss();         // Resolve por Gauss. presume existencia de coluna b de 'Ax=b'
+    void printDeslocamentos();   // Imprime os valores d
+    void printAmplitudes();       // Imprime os valores a*d
 };
 
 Matriz::Matriz()
@@ -40,7 +42,7 @@ Matriz::Matriz(vector<vector<float>> dados)
     this->linhas = dados.size();
     this->colunas = dados[0].size();
     this->matriz = dados;
-    this->deslocamentos = vector<float>(dados.size(), 0); // Inicializa o vetor dos deslocamentos para ter o tamanho correto,
+    this->deslocamentos = vector<float>(dados.size(), 0.0f); // Inicializa o vetor dos deslocamentos para ter o tamanho correto,
                                                           // e todos os elementos são 0
 }
 
@@ -94,10 +96,9 @@ void Matriz::print()
     for (int i = 0; i < this->deslocamentos.size(); i++)
     {
         cout.width(12);
-        cout << this->deslocamentos[i];
+        cout << this->deslocamentos[i]  << " ";
     }
-    cout << endl
-         << endl;
+    cout << endl << endl;
 }
 
 float Matriz::determinante() // TODO finalizar determinante
@@ -123,7 +124,7 @@ void Matriz::montarB(vector<float> b, float a)
         {
             this->matriz[i].push_back(b[i]);
         }
-        this->matriz[this->linhas - 1].push_back(a);
+        this->deslocamentos.push_back(a);
     }
     else
     {
@@ -188,6 +189,30 @@ void Matriz::resolveGauss()
     }
 }
 
+void Matriz::printDeslocamentos()
+{
+    cout << endl;
+    cout << "Deslocamentos: ";
+    for(int i = 0; i < colunas - 1; i++)
+    {
+        cout << this->deslocamentos[i] << " ";
+    }
+    cout << endl;
+}
+
+void Matriz::printAmplitudes()
+{
+    float a = deslocamentos[colunas-1];
+
+    cout << endl;
+    cout << "Amplitudes de deslocamento: ";
+    for(int i = 0; i < colunas - 1; i++)
+    {
+        cout << a*deslocamentos[i] << "  ";
+    }
+    cout << endl;
+}
+
 // Globais
 int n;   // Número de pêndulos
 float a; // Parâmetro 'a' em 'a*d' da amplitude
@@ -202,8 +227,7 @@ void boot()
     cout << "0 para parar o programa.\n";
     cout << "1 para resolver uma matriz por Gauss.\n";
     cout << "2 para resolver uma matriz por Gauss-Jordan.\n";
-    cout << "3 para resolver uma matriz por Cramer.\n";
-    cout << "4 para resumir soluções de uma matriz.\n";
+    cout << "3 para resumir soluções de uma matriz.\n";
     cout << "9 para calibrar o sistema.\n";
 }
 
@@ -300,6 +324,12 @@ int main()
     {
         boot();
         menu = inputMenu();
+        if(menu == 99)
+        {
+            matriz.print();
+            matriz.printDeslocamentos();
+            matriz.printAmplitudes();
+        }
     }
     shutdown();
    /*  // Testes:
