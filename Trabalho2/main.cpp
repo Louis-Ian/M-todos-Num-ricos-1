@@ -217,7 +217,6 @@ void Matriz::printAmplitudes()
 int n;   // Número de pêndulos
 float a; // Parâmetro 'a' em 'a*d' da amplitude
 Matriz matriz;
-// vector<Matriz> matrizes;
 
 void boot()
 {
@@ -236,7 +235,7 @@ void shutdown()
     cout << "FIM DO PROGRAMA.\n";
 }
 
-Matriz input() // TODO Função que permite input de dados de uma matriz
+Matriz input()
 {
     int n = 0;
     cout << "Insira o tamanho da matriz: ";
@@ -272,7 +271,7 @@ Matriz input() // TODO Função que permite input de dados de uma matriz
     return r;
 }
 
-int inputMenu() // TODO Função que permite input de dados de uma matriz
+int inputMenu()
 {
     int menu;
     Matriz matrizCalibragem({{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}}); // Matriz C da questão;
@@ -318,7 +317,7 @@ int inputMenu() // TODO Função que permite input de dados de uma matriz
         mGaussJordan.printDeslocamentos();
         mGaussJordan.printAmplitudes();
 
-        break;
+        return 1;
     case 9:
         matriz = matrizCalibragem;
         matriz.montarB(vetorV, 1.0f);
@@ -367,30 +366,6 @@ int main()
         }
     }
     shutdown();
-   /*  // Testes:
-    vector<vector<float>> dadosTeste1d = {{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}}; // Matriz C da questão
-    // vector<vector<float>> dadosTeste1d = {{10.0, 1.0, 1.0}, {1.0, 10.0, 1.0}, {1.0, 1.0, 10.0}};
-    vector<float> testeB = {12.0f, 12.0f, 12.0f}; // Vetor V da questão
-    Matriz teste1d(dadosTeste1d);
-    teste1d.montarB(testeB, 1.0f);
-
-    // cout << "\n(2):\n";
-    // vector<float> linha2 = teste1d.get(2);
-    // for (int i = 0; i < teste1d.getLinhas(); i++)
-    // {
-    //     cout << linha2[i] << " ";
-    // }
-    // cout << endl;
-
-    // cout << "\n(1, 1):\n";
-    // cout << teste1d.get(1, 1) << endl;
-
-    teste1d.print();
-    cout << endl;
-    teste1d.gauss();
-    teste1d.print();
-    teste1d.resolveGauss();
-    teste1d.print(); */
 
     return 0;
 }
