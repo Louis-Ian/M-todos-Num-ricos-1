@@ -20,7 +20,7 @@ public:
     vector<float> get(int);      // Retorna linha da matriz
     float get(int, int);         // Retorna elemento da matriz
     void set(int, int, float);   // Altera elemento da matriz
-    void montarB(vector<float>); // Monta a matriz A com o vetor B
+    void montarB(vector<float>, float); // Monta a matriz A com o vetor B e o parâmetro a
     float determinante();        // Calcula determinante da matriz
     void gauss();                // Eliminação de Gauss
     void gauss_jordan();         // Eliminação de Gaus-Jordan
@@ -114,7 +114,7 @@ float Matriz::determinante() // TODO finalizar determinante
     }
 }
 
-void Matriz::montarB(vector<float> b)
+void Matriz::montarB(vector<float> b, float a)
 {
     if (b.size() == this->linhas)
     {
@@ -123,6 +123,7 @@ void Matriz::montarB(vector<float> b)
         {
             this->matriz[i].push_back(b[i]);
         }
+        this->matriz[this->linhas - 1].push_back(a);
     }
     else
     {
@@ -190,13 +191,14 @@ void Matriz::resolveGauss()
 // Globais
 int n;   // Número de pêndulos
 float a; // Parâmetro 'a' em 'a*d' da amplitude
-vector<Matriz> matrizes;
+Matriz matriz;
+// vector<Matriz> matrizes;
 
 void boot()
 {
     cout.width(6);
     cout << "\nMENU:\n";
-    cout << "Inserir:\n";
+    cout << "Insira:\n";
     cout << "0 para parar o programa.\n";
     cout << "1 para resolver uma matriz por Gauss.\n";
     cout << "2 para resolver uma matriz por Gauss-Jordan.\n";
@@ -207,50 +209,104 @@ void boot()
 
 void shutdown()
 {
-    cout << "FIM DO PROGRAMA.";
+    cout << "FIM DO PROGRAMA.\n";
+}
+
+Matriz input() // TODO Função que permite input de dados de uma matriz
+{
+    int n = 0;
+    cout << "Insira o tamanho da matriz: ";
+    cin >> n;
+
+    float a = 0.0f;
+    cout << "\nInsira o valor do parametro a: ";
+    cin >> a;
+
+    vector<float> init1(n, 0.0f);
+    vector<vector<float>> entrada(n, init1);
+    cout << endl << "Insira os termos da matriz.";
+    for(int i = 0; i < n; i++)
+    {
+        for(int j = 0; j < n; j++)
+        {
+            cout << endl << i + 1 << "," << j + 1<< ":";
+            cin >> entrada[i][j];
+        }
+    }
+
+    cout << endl << "Insira os termos do vetor.";
+    vector<float> init2(n, 0.0f);
+    for(int i = 0; i < n; i++)
+    {
+        cout << endl << i + 1 << ":";
+        cin >> init2[i];
+    }
+
+    Matriz r(entrada);
+    r.montarB(init2, a);
+
+    return r;
 }
 
 int inputMenu() // TODO Função que permite input de dados de uma matriz
 {
     int menu;
+    Matriz matrizCalibragem({{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}}); // Matriz C da questão;
+    vector<float> vetorV = {12.0f, 12.0f, 12.0f}; // Vetor V da questão
+
     cin >> menu;
 
     switch (menu)
     {
     case 0:
-        return 1;
+        return 0;
         break;
     case 1:
+        matriz = input();
+        matriz.print();
+        matriz.gauss();
+        matriz.resolveGauss();
+        matriz.print();
+        return 1;
+        break;
+    case 2:
 
+        break;
+    case 3:
+
+        break;
+    case 4:
+
+        break;
+    case 9:
+        matriz = matrizCalibragem;
+        matriz.montarB(vetorV, 1.0f);
         break;
     default:
         cout << "Entrada invalida. Tente novamente.\n\n";
         boot();
+        return 1;
         break;
     }
 
     return 0;
 }
 
-Matriz input() // TODO Função que permite input de dados de uma matriz
-{
-}
-
 int main()
-{ /*
-    boot();
-    int fim = 0;
-    do
+{
+    int menu = 1;
+    while (menu != 0)
     {
-        fim = inputMenu();
-    } while (!fim);
-    shutdown();*/
-    // /* Testes:
+        boot();
+        menu = inputMenu();
+    }
+    shutdown();
+   /*  // Testes:
     vector<vector<float>> dadosTeste1d = {{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}}; // Matriz C da questão
     // vector<vector<float>> dadosTeste1d = {{10.0, 1.0, 1.0}, {1.0, 10.0, 1.0}, {1.0, 1.0, 10.0}};
     vector<float> testeB = {12.0f, 12.0f, 12.0f}; // Vetor V da questão
     Matriz teste1d(dadosTeste1d);
-    teste1d.montarB(testeB);
+    teste1d.montarB(testeB, 1.0f);
 
     // cout << "\n(2):\n";
     // vector<float> linha2 = teste1d.get(2);
@@ -265,10 +321,10 @@ int main()
 
     teste1d.print();
     cout << endl;
-    teste1d.gauss_jordan();
+    teste1d.gauss();
     teste1d.print();
     teste1d.resolveGauss();
-    teste1d.print();
+    teste1d.print(); */
 
     return 0;
 }
