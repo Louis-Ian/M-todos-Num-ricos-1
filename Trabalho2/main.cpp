@@ -277,6 +277,9 @@ int inputMenu() // TODO Função que permite input de dados de uma matriz
     int menu;
     Matriz matrizCalibragem({{10.0f, 1.0f, 1.0f}, {1.0f, 10.0f, 1.0f}, {1.0f, 1.0f, 10.0f}}); // Matriz C da questão;
     vector<float> vetorV = {12.0f, 12.0f, 12.0f}; // Vetor V da questão
+    Matriz mGauss;
+    Matriz mGaussJordan;
+
 
     cin >> menu;
 
@@ -284,7 +287,6 @@ int inputMenu() // TODO Função que permite input de dados de uma matriz
     {
     case 0:
         return 0;
-        break;
     case 1:
         matriz = input();
         matriz.print();
@@ -300,13 +302,30 @@ int inputMenu() // TODO Função que permite input de dados de uma matriz
     case 3:
 
         break;
-    case 4:
-
-        break;
     case 9:
         matriz = matrizCalibragem;
         matriz.montarB(vetorV, 1.0f);
-        break;
+        cout << "\nMATRIZ:\n";
+        matriz.print();
+
+        cout << "\nGAUSS:\n";
+        mGauss = matriz;
+        mGauss.gauss();
+        mGauss.resolveGauss();
+        mGauss.print();
+        mGauss.printDeslocamentos();
+        mGauss.printAmplitudes();
+
+
+        cout << "\nGAUSS-JORDAN:\n";
+        mGaussJordan = matriz;
+        mGaussJordan.gauss_jordan();
+        mGaussJordan.resolveGauss();
+        mGaussJordan.print();
+        mGaussJordan.printDeslocamentos();
+        mGaussJordan.printAmplitudes();
+        
+        return 1;
     default:
         cout << "Entrada invalida. Tente novamente.\n\n";
         boot();
